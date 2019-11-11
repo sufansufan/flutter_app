@@ -28,7 +28,11 @@ dependencies:
   flutter_screenutil: ^0.5.3 #适应屏幕插件
   #url_launcher: ^5.1.0 #拨打电话插件
   flutter_easyrefresh: ^2.0.3 # 上拉加载插件
-
+  provide: ^1.0.2 #状态管理
+  fluttertoast: ^3.1.0 #flutter提示消息
+  fluro: ^1.5.1 #路由插件
+  flutter_html: ^0.11.0 #html插件
+  shared_preferences: ^0.5.3+4 #数据持久化
 dev_dependencies:
   flutter_test:
     sdk: flutter

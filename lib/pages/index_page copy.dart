@@ -1,4 +1,4 @@
-// 这是是使用Provide的时候的导航跳转
+// 这是原来使用 StatefulWidget的时候的路由跳转
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/pages/category_page.dart';
@@ -7,10 +7,14 @@ import './home_page.dart';
 import './category_page.dart';
 import './cart_page.dart';
 import './member_page.dart';
-import 'package:provide/provide.dart';
-import '../provide/current_index.dart';
 
-class IndexPage extends StatelessWidget {
+
+class IndexPage extends StatefulWidget {
+  IndexPage({Key key}) : super(key: key);
+  _IndexPageState createState() => _IndexPageState();
+}
+
+class _IndexPageState extends State<IndexPage> {
   final List<BottomNavigationBarItem> bottomTabs = [
     BottomNavigationBarItem(
       icon: Icon(CupertinoIcons.home),
@@ -36,28 +40,38 @@ class IndexPage extends StatelessWidget {
     CartPage(),
     MemberPage()
   ];
+  int currentIndex = 0;
+  var currentPage;
+
+  @override
+  void initState() {
+    currentPage = tabBodies[currentIndex];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+     // 初始化设计尺寸
     ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
-    return Provide<CurrentIndexProvide>(
-      builder: (context, child, val) {
-        int currentIndex = Provide.value<CurrentIndexProvide>(context).currnetIndex;
-        return Scaffold(
-          backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: currentIndex,
-            items: bottomTabs,
-            onTap: (index) {
-               Provide.value<CurrentIndexProvide>(context).changeIndex(index);
-            },
-          ),
-          body: IndexedStack(
-            index: currentIndex,
-            children: tabBodies
-          )
-        );
-      },
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: currentIndex,
+        items: bottomTabs,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+            currentPage = tabBodies[currentIndex];
+          });
+        },
+      ),
+      body: IndexedStack(
+        index: currentIndex,
+        children: tabBodies
+      )
+      // 保持页面的状态的时候 此时就不需要使用currentpage而是换成IndexedStack
+      // currentPage,
     );
   }
 }
